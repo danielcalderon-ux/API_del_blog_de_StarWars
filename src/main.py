@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Usuario, Personajes, Planetas, Favoritos
 #from models import Person
 
 app = Flask(__name__)
@@ -32,12 +32,44 @@ def sitemap():
 
 @app.route('/user', methods=['GET'])
 def handle_hello():
-
     response_body = {
         "msg": "Hello, this is your GET /user response "
     }
 
     return jsonify(response_body), 200
+
+@app.route('/usuarios', methods=['GET'])
+def get_usuario():
+    usuario_query = Usuario.query.all()
+    all_usuarios = list(map(lambda x: x.serialize(), usuario_query))
+    return jsonify(all_usuarios), 200
+
+@app.route('/personajes', methods=['GET'])
+def get_personajes():
+    personajes_query = Personajes.query.all()
+    all_personajes = list(map(lambda x: x.serialize(), personajes_query))
+    return jsonify(all_personajes), 200
+
+@app.route('/planetas', methods=['GET'])
+def get_planetas():
+    planetas_query = Planetas.query.all()
+    all_planetas = list(map(lambda x: x.serialize(), planetas_query))
+    return jsonify(all_planetas), 200
+
+@app.route('/personajes/<int:id>', methods=['GET'])
+def get_personaje(id):
+    personaje = Personajes.query.get(id)
+
+    personaje_selec = personaje.serialize()
+    return jsonify(personaje_selec), 200
+
+@app.route('/planetas/<int:id>', methods=['GET'])
+def get_planeta(id):
+    planeta = Planetas.query.get(id)
+
+    planeta_selec = planeta.serialize()
+    return jsonify(planeta_selec), 200
+
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
