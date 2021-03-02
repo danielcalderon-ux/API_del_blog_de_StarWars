@@ -70,6 +70,26 @@ def get_planeta(id):
     planeta_selec = planeta.serialize()
     return jsonify(planeta_selec), 200
 
+@app.route('/usuarios', methods=['POST'])
+def post_usuario():
+    request_usuario = request.get_json()
+
+    user1 = Usuario(name=request_usuario["name"])
+    db.session.add(user1)
+    db.session.commit()
+    return jsonify("all good"), 200
+
+@app.route('/usuarios/<int:id>', methods=['DELETE'])
+def delete_favorito(id):
+    user1 = Usuario.query.get(id)
+    if user1 is None:
+        raise APIException('User not found', status_code=404)
+
+    db.session.delete(user1)
+    db.session.commit()
+
+    return jsonify("all good"), 200
+
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
