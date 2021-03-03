@@ -1,4 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Table, Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
 db = SQLAlchemy()
 
@@ -21,18 +24,23 @@ class Favoritos(db.Model):
     __tablename__ = 'favoritos'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-    personajes_name = db.Column(db.String(250), db.ForeignKey('personajes.name'))
-    planetas_name = db.Column(db.String(250), db.ForeignKey('planetas.name'))
+    personaje_id = db.Column(db.String(250), db.ForeignKey('personajes.id'))
+    planeta_id = db.Column(db.String(250), db.ForeignKey('planetas.id'))
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    personaje = db.relationship('Personajes')
+    planeta = db.relationship('Planetas')
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.name
 
     def serialize(self):
         return {
             "id": self.id,
-            "personajes_name": self.personajes_name,
-            "planetas_name": self.planetas_name
+            "personaje_id": self.personaje_id,
+            "planetas_id": self.planetas_id,
+            "personaje" : self.personaje,
+            "planeta" : self.planeta
+
             # do not serialize the password, its a security breach
         }
 
@@ -44,7 +52,7 @@ class Usuario(db.Model):
     name = db.Column(db.String(250))
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.name
 
     def serialize(self):
         return {
@@ -60,9 +68,9 @@ class Personajes(db.Model):
     estatura = db.Column(db.String(250))
     fecha_nacimiento = db.Column(db.String(250))
     genero = db.Column(db.String(250))
-    favoritoP = db.relationship('Favoritos')
+    #favoritoP = db.relationship('Favoritos')
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.name
 
     def serialize(self):
         return {
@@ -84,7 +92,7 @@ class Planetas(db.Model):
     favorito = db.relationship('Favoritos')
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.name
 
     def serialize(self):
         return {

@@ -90,6 +90,22 @@ def delete_favorito(id):
 
     return jsonify("all good"), 200
 
+"""@app.route('/favorito/<int:id>', methods=['GET'])
+def usuario_favorito(id):
+    fav = Usuario.query.get(id)
+    if fav is None:
+        raise APIException('User not found', status_code=404)
+
+    fav_selec = fav.serialize()
+
+    return jsonify("all good"), 200"""
+
+"""@app.route('/favoritos', methods=['GET'])
+def get_planetas():
+    favoritos_query = Favoritos.query.all()
+    all_favoritos = list(map(lambda x: x.serialize(), favoritos_query))
+    return jsonify(all_favoritos), 200"""
+
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
