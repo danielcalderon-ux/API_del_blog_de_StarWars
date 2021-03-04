@@ -23,12 +23,13 @@ class User(db.Model):
 class Favoritos(db.Model):
     __tablename__ = 'favoritos'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250))
+    #name = db.Column(db.String(250))
     personaje_id = db.Column(db.String(250), db.ForeignKey('personajes.id'))
     planeta_id = db.Column(db.String(250), db.ForeignKey('planetas.id'))
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     personaje = db.relationship('Personajes')
     planeta = db.relationship('Planetas')
+    usuario = db.relationship('Usuario')
 
     def __repr__(self):
         return '<User %r>' % self.name
@@ -37,9 +38,11 @@ class Favoritos(db.Model):
         return {
             "id": self.id,
             "personaje_id": self.personaje_id,
-            "planetas_id": self.planetas_id,
-            "personaje" : self.personaje,
-            "planeta" : self.planeta
+            "planeta_id": self.planeta_id,
+            "usuario_id": self.usuario_id,
+            #"personaje" : self.personaje,
+            #"planeta" : self.planeta,
+            #"usuario" : self.usuario
 
             # do not serialize the password, its a security breach
         }
@@ -52,7 +55,7 @@ class Usuario(db.Model):
     name = db.Column(db.String(250))
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<Usuario %r>' % self.name
 
     def serialize(self):
         return {
@@ -70,7 +73,7 @@ class Personajes(db.Model):
     genero = db.Column(db.String(250))
     #favoritoP = db.relationship('Favoritos')
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<Personaje %r>' % self.name
 
     def serialize(self):
         return {
@@ -92,7 +95,7 @@ class Planetas(db.Model):
     favorito = db.relationship('Favoritos')
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<Planeta %r>' % self.name
 
     def serialize(self):
         return {

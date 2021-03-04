@@ -79,9 +79,9 @@ def post_usuario():
     db.session.commit()
     return jsonify("all good"), 200
 
-@app.route('/usuarios/<int:id>', methods=['DELETE'])
+@app.route('/favoritos/<int:id>', methods=['DELETE'])
 def delete_favorito(id):
-    user1 = Usuario.query.get(id)
+    user1 = Favoritos.query.get(id)
     if user1 is None:
         raise APIException('User not found', status_code=404)
 
@@ -89,6 +89,30 @@ def delete_favorito(id):
     db.session.commit()
 
     return jsonify("all good"), 200
+
+@app.route('/usuarios/<int:id>/favoritos', methods=['GET'])
+def get_usu(id):
+    usuario = Usuario.query.get(id)
+
+    usuario_selec = usuario.serialize()
+    return jsonify(usuario_selec), 200
+
+@app.route('/favoritos', methods=['GET'])
+def get_favoritos():
+    favoritos_query = Favoritos.query.all()
+    all_favoritos = list(map(lambda x: x.serialize(), favoritos_query))
+    return jsonify(all_favoritos), 200
+
+@app.route('/favoritos/<int:id>', methods=['POST'])
+def post_favoritos(id):
+    request_favoritos = request.get_json()
+
+    fav = Favoritos(personaje_id=request_favoritos["personaje_id"],planeta_id=request_favoritos["planeta_id"],usuario_id=id)
+    db.session.add(fav)
+    db.session.commit()
+    return jsonify("all good"), 200
+
+    
 
 """@app.route('/favorito/<int:id>', methods=['GET'])
 def usuario_favorito(id):
