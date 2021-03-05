@@ -92,10 +92,9 @@ def delete_favorito(id):
 
 @app.route('/usuarios/<int:id>/favoritos', methods=['GET'])
 def get_usu(id):
-    usuario = Usuario.query.get(id)
-
-    usuario_selec = usuario.serialize()
-    return jsonify(usuario_selec), 200
+    favoritos=Favoritos.query.filter_by(usuario_id=id)
+    all_favoritos = list(map(lambda x: x.serialize(),favoritos))
+    return jsonify(all_favoritos), 200
 
 @app.route('/favoritos', methods=['GET'])
 def get_favoritos():
