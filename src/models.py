@@ -24,21 +24,21 @@ class Favoritos(db.Model):
     __tablename__ = 'favoritos'
     id = db.Column(db.Integer, primary_key=True)
     #name = db.Column(db.String(250))
-    personaje_id = db.Column(db.String(250), db.ForeignKey('personajes.id'))
-    planeta_id = db.Column(db.String(250), db.ForeignKey('planetas.id'))
+    personaje_name = db.Column(db.String(250), db.ForeignKey('personajes.name'))
+    planeta_name = db.Column(db.String(250), db.ForeignKey('planetas.name'))
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     personaje = db.relationship('Personajes')
     planeta = db.relationship('Planetas')
     usuario = db.relationship('Usuario')
 
-    def __repr__(self):
-        return '<User %r>' % self.name
+    #def __repr__(self):
+        #return '<User %r>' % self.name
 
     def serialize(self):
         return {
             "id": self.id,
-            "personaje_id": self.personaje_id,
-            "planeta_id": self.planeta_id,
+            "personaje_name": self.personaje_name,
+            "planeta_name": self.planeta_name,
             "usuario_id": self.usuario_id,
             #"personaje" : self.personaje,
             #"planeta" : self.planeta,
@@ -51,7 +51,8 @@ class Favoritos(db.Model):
 class Usuario(db.Model):
     __tablename__ = 'usuario'
     id = db.Column(db.Integer, primary_key=True)
-    contraseña = db.Column(db.String(20)) 
+    password = db.Column(db.String(120))
+    email = db.Column(db.String(120),unique=True)
     name = db.Column(db.String(250))
 
     def __repr__(self):
@@ -61,6 +62,7 @@ class Usuario(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "email": self.email,
             # do not serialize the password, its a security breach
         }
 

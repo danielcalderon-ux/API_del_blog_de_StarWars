@@ -11,6 +11,9 @@ from admin import setup_admin
 from models import db, User, Usuario, Personajes, Planetas, Favoritos
 #from models import Person
 
+## Nos permite hacer las encripciones de contraseñas
+from werkzeug.security import generate_password_hash, check_password_hash
+
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
@@ -106,7 +109,7 @@ def get_favoritos():
 def post_favoritos(id):
     request_favoritos = request.get_json()
 
-    fav = Favoritos(personaje_id=request_favoritos["personaje_id"],planeta_id=request_favoritos["planeta_id"],usuario_id=id)
+    fav = Favoritos(personaje_name=request_favoritos["personaje_name"],planeta_name=request_favoritos["planeta_name"],usuario_id=id)
     db.session.add(fav)
     db.session.commit()
     return jsonify("all good"), 200
@@ -128,6 +131,34 @@ def get_planetas():
     favoritos_query = Favoritos.query.all()
     all_favoritos = list(map(lambda x: x.serialize(), favoritos_query))
     return jsonify(all_favoritos), 200"""
+
+"""@app.route('/register', methods=["POST"])
+def register():
+    if request.method == 'POST':
+        email = request.json.get("email", None)
+        password = request.json.get("password", None)
+
+        if not email:
+            return jsonify({"msg": "email is required"}), 400
+        if not password:
+            return jsonify({"msg": "Password is required"}), 400
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            return jsonify({"msg": "Username  already exists"}), 400
+#crea un usuario nuevo
+        user = Usuario()
+        user.email = email
+        hashed_password = generate_password_hash(password)
+        print(password, hashed_password)
+
+        user.password = hashed_password
+
+        db.session.add(user)
+        db.session.commit()
+
+        return jsonify({"success": "Thanks. your register was successfully", "status": "true"}), 200"""
+
 
 
 # this only runs if `$ python src/main.py` is executed

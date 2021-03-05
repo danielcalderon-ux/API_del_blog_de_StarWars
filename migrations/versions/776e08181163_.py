@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 0e59108b5aa8
+Revision ID: 776e08181163
 Revises: 
-Create Date: 2021-03-02 17:23:34.636499
+Create Date: 2021-03-05 20:28:54.104994
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0e59108b5aa8'
+revision = '776e08181163'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,18 +46,19 @@ def upgrade():
     )
     op.create_table('usuario',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('contraseña', sa.String(length=20), nullable=True),
+    sa.Column('password', sa.String(length=120), nullable=True),
+    sa.Column('email', sa.String(length=120), nullable=True),
     sa.Column('name', sa.String(length=250), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email')
     )
     op.create_table('favoritos',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=250), nullable=True),
-    sa.Column('personajes_name', sa.String(length=250), nullable=True),
-    sa.Column('planetas_name', sa.String(length=250), nullable=True),
+    sa.Column('personaje_name', sa.String(length=250), nullable=True),
+    sa.Column('planeta_name', sa.String(length=250), nullable=True),
     sa.Column('usuario_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['personajes_name'], ['personajes.name'], ),
-    sa.ForeignKeyConstraint(['planetas_name'], ['planetas.name'], ),
+    sa.ForeignKeyConstraint(['personaje_name'], ['personajes.name'], ),
+    sa.ForeignKeyConstraint(['planeta_name'], ['planetas.name'], ),
     sa.ForeignKeyConstraint(['usuario_id'], ['usuario.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
